@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N&M</title>
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #f3e5f5;
@@ -14,16 +15,40 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Dancing Script', cursive;
             text-align: center;
         }
         h1 {
+            font-family: 'Allura', cursive;
             font-size: 3em;
             margin-bottom: 20px;
+            text-transform: uppercase;
         }
         #countdown {
             font-size: 2em;
             margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .time-segment {
+            background: #ffffff;
+            border: 2px solid #4a148c;
+            border-radius: 10px;
+            padding: 10px 15px;
+            width: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .time-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            animation: fadeIn 0.5s forwards;
+        }
+        .time-label {
+            font-size: 0.8em;
+            margin-top: 5px;
         }
         .congratulations {
             display: none;
@@ -39,38 +64,71 @@
 </head>
 <body>
     <h1>N&M</h1>
-    <div id="countdown"></div>
+    <div id="countdown">
+        <div class="time-segment">
+            <div class="time-value" id="weeks">0</div>
+            <div class="time-label">Weeks</div>
+        </div>
+        <div class="time-segment">
+            <div class="time-value" id="days">0</div>
+            <div class="time-label">Days</div>
+        </div>
+        <div class="time-segment">
+            <div class="time-value" id="hours">0</div>
+            <div class="time-label">Hours</div>
+        </div>
+        <div class="time-segment">
+            <div class="time-value" id="minutes">0</div>
+            <div class="time-label">Minutes</div>
+        </div>
+        <div class="time-segment">
+            <div class="time-value" id="seconds">0</div>
+            <div class="time-label">Seconds</div>
+        </div>
+    </div>
     <div id="congratulations" class="congratulations">Congratulations! 🎉🎊</div>
 
     <script>
-        // Set the target date and time in UTC
-        const targetDate = new Date(Date.UTC(2024, 7, 16, 11, 0, 0)).getTime(); // August 16, 2024, 11:00 AM UTC
+        window.onload = function() {
+            // Set the target date and time in UTC
+            const targetDate = new Date(Date.UTC(2024, 7, 16, 11, 0, 0)).getTime(); // August 16, 2024, 11:00 AM UTC
 
-        const countdown = document.getElementById('countdown');
-        const congratulations = document.getElementById('congratulations');
+            const countdown = document.getElementById('countdown');
+            const congratulations = document.getElementById('congratulations');
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
 
-            if (distance < 0) {
-                countdown.style.display = 'none';
-                congratulations.style.display = 'block';
-                return;
+                if (distance < 0) {
+                    countdown.style.display = 'none';
+                    congratulations.style.display = 'block';
+                    return;
+                }
+
+                const weeks = Math.floor(distance / (1000 * 60 * 60 * 24 * 7));
+                const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 7)) / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('weeks').innerHTML = weeks;
+                document.getElementById('days').innerHTML = days;
+                document.getElementById('hours').innerHTML = hours;
+                document.getElementById('minutes').innerHTML = minutes;
+                document.getElementById('seconds').innerHTML = seconds;
+
+                // Add animation class
+                document.querySelectorAll('.time-value').forEach(function(element) {
+                    element.classList.remove('fadeIn');
+                    void element.offsetWidth; // Trigger reflow to restart animation
+                    element.classList.add('fadeIn');
+                });
             }
 
-            const weeks = Math.floor(distance / (1000 * 60 * 60 * 24 * 7));
-            const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 7)) / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            countdown.innerHTML = `
-                ${weeks}w ${days}d ${hours}h ${minutes}m ${seconds}s
-            `;
-        }
-
-        setInterval(updateCountdown, 1000);
+            updateCountdown(); // Initial call to display the timer immediately
+            setInterval(updateCountdown, 1000);
+        };
     </script>
 </body>
 </html>
