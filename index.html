@@ -29,14 +29,15 @@
             margin: 20px 0;
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         .time-segment {
             background: #ffffff;
             border: 2px solid #4a148c;
             border-radius: 10px;
             padding: 10px 15px;
-            width: 70px;
+            min-width: 70px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -59,6 +60,24 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            #countdown {
+                font-size: 1.2em;
+            }
+            .time-segment {
+                padding: 5px 10px;
+                min-width: 50px;
+            }
+            .time-value {
+                font-size: 1.2em;
+            }
+            .time-label {
+                font-size: 0.7em;
+            }
         }
     </style>
 </head>
